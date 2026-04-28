@@ -5,40 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-  body {
+  html, body {
     margin: 0;
-    background: transparent;
+    padding: 0;
+    background: #191919;
+    color: white;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     text-align: center;
-    color: white;
-    font-family: Georgia, serif;
   }
 
   .greeting {
-    font-size: 48px;
+    font-size: 46px;
     letter-spacing: 3px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
-  .date, .time {
-    font-family: monospace;
-    font-size: 14px;
-    letter-spacing: 2px;
-    opacity: 0.8;
+  .date,
+  .time {
+    font-family: "Courier New", monospace;
+    font-size: 15px;
+    letter-spacing: 3px;
+    opacity: 0.85;
+  }
+
+  .date {
+    margin-bottom: 10px;
   }
 </style>
 </head>
 
 <body>
-
-<div>
-  <div class="greeting" id="greeting"></div>
-  <div class="date" id="date"></div>
-  <div class="time" id="time"></div>
-</div>
+  <div>
+    <div class="greeting" id="greeting"></div>
+    <div class="date" id="date"></div>
+    <div class="time" id="time"></div>
+  </div>
 
 <script>
 const TZ = "Africa/Cairo";
@@ -46,19 +56,16 @@ const TZ = "Africa/Cairo";
 function update() {
   const now = new Date();
 
-  // ambil jam Cairo
-  const hour = parseInt(new Intl.DateTimeFormat("en-US", {
+  const hour = Number(new Intl.DateTimeFormat("en-US", {
     timeZone: TZ,
     hour: "2-digit",
     hour12: false
   }).format(now));
 
-  // greeting
-  let greet = "GOOD EVENING";
-  if (hour < 12) greet = "GOOD MORNING";
-  else if (hour < 18) greet = "GOOD AFTERNOON";
+  let greeting = "GOOD EVENING";
+  if (hour < 12) greeting = "GOOD MORNING";
+  else if (hour < 18) greeting = "GOOD AFTERNOON";
 
-  // date
   const date = new Intl.DateTimeFormat("en-US", {
     timeZone: TZ,
     weekday: "long",
@@ -67,7 +74,6 @@ function update() {
     year: "numeric"
   }).format(now).toUpperCase();
 
-  // time
   const time = new Intl.DateTimeFormat("en-US", {
     timeZone: TZ,
     hour: "2-digit",
@@ -76,7 +82,7 @@ function update() {
     hour12: true
   }).format(now).replace(/:/g, " : ");
 
-  document.getElementById("greeting").textContent = greet;
+  document.getElementById("greeting").textContent = greeting;
   document.getElementById("date").textContent = date;
   document.getElementById("time").textContent = time;
 }
@@ -84,6 +90,5 @@ function update() {
 update();
 setInterval(update, 1000);
 </script>
-
 </body>
 </html>
