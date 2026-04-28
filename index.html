@@ -1,112 +1,89 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cairo Time Widget</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      overflow: hidden;
-      font-family: Georgia, "Times New Roman", serif;
-      color: #ffffff;
-    }
+<style>
+  body {
+    margin: 0;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    color: white;
+    font-family: Georgia, serif;
+  }
 
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+  .greeting {
+    font-size: 48px;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
 
-    .wrap {
-      width: 100%;
-    }
-
-    .greeting {
-      font-size: clamp(30px, 6vw, 56px);
-      letter-spacing: 3px;
-      font-weight: 500;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-    }
-
-    .date,
-    .time {
-      font-family: "Courier New", monospace;
-      font-size: clamp(13px, 2vw, 18px);
-      letter-spacing: 3px;
-      opacity: 0.9;
-      text-transform: uppercase;
-    }
-
-    .date {
-      margin-bottom: 10px;
-    }
-  </style>
+  .date, .time {
+    font-family: monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+  }
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="greeting" id="greeting"></div>
-    <div class="date" id="date"></div>
-    <div class="time" id="time"></div>
-  </div>
 
-  <script>
-    const TIMEZONE = "Africa/Cairo";
+<div>
+  <div class="greeting" id="greeting"></div>
+  <div class="date" id="date"></div>
+  <div class="time" id="time"></div>
+</div>
 
-    function getHourInCairo() {
-      return Number(
-        new Intl.DateTimeFormat("en-US", {
-          timeZone: TIMEZONE,
-          hour: "2-digit",
-          hour12: false
-        }).format(new Date())
-      );
-    }
+<script>
+const TZ = "Africa/Cairo";
 
-    function updateWidget() {
-      const now = new Date();
-      const hour = getHourInCairo();
+function update() {
+  const now = new Date();
 
-      let greeting = "GOOD EVENING";
-      if (hour >= 5 && hour < 12) greeting = "GOOD MORNING";
-      else if (hour >= 12 && hour < 18) greeting = "GOOD AFTERNOON";
+  // ambil jam Cairo
+  const hour = parseInt(new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    hour: "2-digit",
+    hour12: false
+  }).format(now));
 
-      const date = new Intl.DateTimeFormat("en-US", {
-        timeZone: TIMEZONE,
-        weekday: "long",
-        month: "long",
-        day: "2-digit",
-        year: "numeric"
-      }).format(now).toUpperCase();
+  // greeting
+  let greet = "GOOD EVENING";
+  if (hour < 12) greet = "GOOD MORNING";
+  else if (hour < 18) greet = "GOOD AFTERNOON";
 
-      const time = new Intl.DateTimeFormat("en-US", {
-        timeZone: TIMEZONE,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-      })
-        .format(now)
-        .replace(/:/g, " : ");
+  // date
+  const date = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    weekday: "long",
+    month: "long",
+    day: "2-digit",
+    year: "numeric"
+  }).format(now).toUpperCase();
 
-      document.getElementById("greeting").textContent = greeting;
-      document.getElementById("date").textContent = date;
-      document.getElementById("time").textContent = time;
-    }
+  // time
+  const time = new Intl.DateTimeFormat("en-US", {
+    timeZone: TZ,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  }).format(now).replace(/:/g, " : ");
 
-    updateWidget();
-    setInterval(updateWidget, 1000);
-  </script>
+  document.getElementById("greeting").textContent = greet;
+  document.getElementById("date").textContent = date;
+  document.getElementById("time").textContent = time;
+}
+
+update();
+setInterval(update, 1000);
+</script>
+
 </body>
 </html>
