@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greeting Widget</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #f3f3f3;
+      overflow: hidden;
+    }
+
+    .widget {
+      width: min(92vw, 680px);
+      border: 1.5px solid rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      padding: 22px 28px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .greeting {
+      font-size: clamp(28px, 6vw, 48px);
+      letter-spacing: 2px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .date,
+    .time {
+      font-family: "Courier New", monospace;
+      letter-spacing: 2px;
+      font-size: clamp(12px, 2vw, 16px);
+      opacity: 0.85;
+      text-transform: uppercase;
+    }
+
+    .date {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="greeting" id="greeting">GOOD AFTERNOON</div>
+    <div class="date" id="date">SUNDAY, SEPTEMBER 24 2023</div>
+    <div class="time" id="time">04 : 13 : 16 PM</div>
+  </div>
+
+  <script>
+    function getCairoTime() {
+      const now = new Date();
+      const cairoTime = new Date(now.toLocaleString("en-US", { timeZone: "Africa/Cairo" }));
+      return cairoTime;
+    }
+
+    function updateWidget() {
+      const now = getCairoTime();
+      const hour = now.getHours();
+
+      let greeting = "GOOD EVENING";
+      if (hour < 12) greeting = "GOOD MORNING";
+      else if (hour < 18) greeting = "GOOD AFTERNOON";
+
+      const date = now.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "2-digit",
+        year: "numeric",
+        timeZone: "Africa/Cairo"
+      }).toUpperCase();
+
+      const timeParts = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+        timeZone: "Africa/Cairo"
+      }).replace(/:/g, " : ");
+
+      document.getElementById("greeting").textContent = greeting;
+      document.getElementById("date").textContent = date;
+      document.getElementById("time").textContent = timeParts;
+    }
+
+    updateWidget();
+    setInterval(updateWidget, 1000);
+  </script>
+</body>
+</html>
